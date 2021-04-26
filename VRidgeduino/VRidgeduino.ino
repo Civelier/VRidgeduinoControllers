@@ -269,5 +269,5 @@ void loop()
 	packet.printTo(udp);
 	udp.endPacket();
 
-	//delay(10);
+	delay(10);
 }

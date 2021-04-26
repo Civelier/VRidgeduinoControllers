@@ -18,6 +18,9 @@
         <Label x:Name="GyroZ" Content="0" HorizontalAlignment="Left" Margin="134,241,0,0" VerticalAlignment="Top"/>
         <Label Content="Left:" HorizontalAlignment="Left" Margin="78,87,0,0" VerticalAlignment="Top"/>
         <Label x:Name="LeftConnectionLabel" Content="Disconnected" HorizontalAlignment="Left" Margin="110,87,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="LeftHandRotLabel" Content="Label" HorizontalAlignment="Left" Margin="296,28,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="LeftHandPosLabel" Content="Label" HorizontalAlignment="Left" Margin="296,59,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="VRidgeStateLabel" Content="VRidge off" HorizontalAlignment="Left" Margin="57,28,0,0" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>

@@ -53,5 +53,10 @@ namespace VRidgeduinoControllers.MathUtilities
         {
             return new N.Vector4(vector.X, vector.Y, vector.Z, vector.W);
         }
+
+        public static Vector3 ToAccord(this K.SkeletonPoint point)
+        {
+            return new Vector3(point.X, point.Y, point.Z);
+        }
     }
 }

@@ -17,7 +17,11 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using VRidge = VRE.Vridge.API.Client;
 using VRE.Vridge.API.Client;
-using Microsoft.Kinect;
+//using Microsoft.Kinect;
+using Accord;
+using Accord.Math;
+using K = Microsoft.Kinect;
+using VRidgeduinoControllers.MathUtilities;
 
 namespace VRidgeduinoControllers
 {
@@ -31,6 +35,49 @@ namespace VRidgeduinoControllers
         Thread UDPListener;
         Thread RemoteHandler;
         Thread KinectHandler;
+        Vector3 LeftHandPos;
+        Vector3 RightHandPos;
+        Vector3 HeadPos;
+        Vector4 LeftHandRot;
+        Vector4 RightHandRot;
+
+        bool VRidgeHeadOK
+        {
+            get
+            {
+                try
+                {
+                    return Remote != null && Remote.Head != null &&
+                        !Remote.Head.IsDisposed;
+
+                }
+                catch (ObjectDisposedException)
+                {
+
+                }
+                return false;
+            }
+        }
+
+        bool VRidgeControllersOK
+        {
+            get
+            {
+                try
+                {
+                    return Remote != null && Remote.Controller != null &&
+                        !Remote.Controller.IsDisposed;
+
+                }
+                catch (ObjectDisposedException)
+                {
+
+                }
+                return false;
+            }
+        }
+         
+
         public MainWindow()
         {
             InitializeComponent();
@@ -38,6 +85,8 @@ namespace VRidgeduinoControllers
             UDPListener.Start();
             RemoteHandler = new Thread(RemoteRoutine);
             RemoteHandler.Start();
+            KinectHandler = new Thread(KinectRoutine);
+            KinectHandler.Start();
         }
 
         void ListenerRoutine()
@@ -129,7 +178,7 @@ namespace VRidgeduinoControllers
 
         void KinectRoutine()
         {
-            KinectSensor sensor = null;
+            K.KinectSensor sensor = null;
             try
             {
                 while (true)
@@ -137,17 +186,17 @@ namespace VRidgeduinoControllers
                     try
                     {
                         Console.WriteLine("Waiting for kinect sensor");
-                        while (KinectSensor.KinectSensors.Count == 0)
+                        while (K.KinectSensor.KinectSensors.Count == 0)
                         {
                             Thread.Sleep(1000);
                         }
-                        sensor = KinectSensor.KinectSensors.First();
+                        sensor = K.KinectSensor.KinectSensors.First();
                         Console.WriteLine("Kinect connected");
                         sensor.Start();
                         sensor.SkeletonStream.Enable();
                         Console.WriteLine("Skeleton stream enabled");
                         sensor.SkeletonFrameReady += Sensor_SkeletonFrameReady;
-                        while (sensor.Status == KinectStatus.Connected)
+                        while (sensor.Status == K.KinectStatus.Connected)
                         {
 
                         }
@@ -173,29 +222,59 @@ namespace VRidgeduinoControllers
             }
         }
 
-        private void Sensor_SkeletonFrameReady(object sender, SkeletonFrameReadyEventArgs e)
+        K.Skeleton FindValidSkeleton(K.Skeleton[] skeletons)
+        {
+            foreach (var s in skeletons)
+            {
+                if (s.TrackingState == K.SkeletonTrackingState.Tracked) return s;
+            }
+            return null;
+        }
+
+        private void Sensor_SkeletonFrameReady(object sender, K.SkeletonFrameReadyEventArgs e)
         {
             
             using (var frame = e.OpenSkeletonFrame())
             {
-                if (frame.SkeletonArrayLength == 0) return;
-                Skeleton[] skeletons = new Skeleton[frame.SkeletonArrayLength];
+                if (frame.FrameNumber % 10 == 0) Console.WriteLine($"Skeletons found: {frame.SkeletonArrayLength}");
+                K.Skeleton[] skeletons = new K.Skeleton[frame.SkeletonArrayLength];
                 frame.CopySkeletonDataTo(skeletons);
-                var s = skeletons.First();
-                s.BoneOrientations[JointType.HandLeft].AbsoluteRotation.
+                var s = FindValidSkeleton(skeletons);
+                if (s == null) return;
+                LeftHandRot = s.BoneOrientations[K.JointType.HandLeft].AbsoluteRotation.Quaternion.ToAccord();
+                LeftHandPos = s.Joints[K.JointType.HandLeft].Position.ToAccord();
+                RightHandRot = s.BoneOrientations[K.JointType.HandRight].AbsoluteRotation.Quaternion.ToAccord();
+                RightHandPos = s.Joints[K.JointType.HandRight].Position.ToAccord();
+                HeadPos = s.Joints[K.JointType.ShoulderCenter].Position.ToAccord();
+                Dispatcher.Invoke(() =>
+                {
+                    LeftHandPosLabel.Content = $"Left hand pos: {LeftHandPos}";
+                    LeftHandRotLabel.Content = $"Left hand rot: {LeftHandRot}";
+                });
+                if (!VRidgeHeadOK) return;
+                Remote.Head.SetPosition(HeadPos.X, HeadPos.Y, HeadPos.Z);
             }
+        }
+
+        void VRidgeStateDisplay()
+        {
+            Dispatcher.Invoke(() => 
+            VRidgeStateLabel.Content = !VRidgeHeadOK && !VRidgeControllersOK ? "VRidge off" :
+                VRidgeHeadOK && VRidgeControllersOK ? "VRidge on" :
+                !VRidgeControllersOK ? "VRidge controllers off" :
+                "VRidge head off");
         }
 
         void UpdateController(int type, int btn1)
         {
-            if (Remote.Controller == null) return;
+            if (!VRidgeControllersOK) return;
             Remote.Controller.SetControllerState(
                 controllerId: type - 1,
                 headRelation: VRidge.Messages.v3.Controller.HeadRelation.Unrelated,
                 suggestedHand: type == 1 ? VRidge.Messages.BasicTypes.HandType.Left :
                 VRidge.Messages.BasicTypes.HandType.Right,
-                orientation: System.Numerics.Quaternion.CreateFromYawPitchRoll(0, 0, 0),
-                position: new System.Numerics.Vector3(0, 0, 0),
+                orientation: type == 1 ? LeftHandRot.ToNumericsQuaternion() : RightHandRot.ToNumericsQuaternion(),
+                position: type == 1 ? LeftHandPos.ToNumerics() : RightHandPos.ToNumerics(),
                 analogX: 0,
                 analogY: 0,
                 analogTrigger: 0,
@@ -211,10 +290,16 @@ namespace VRidgeduinoControllers
         {
             try
             {
-                using (Remote = new VRidge.Remotes.VridgeRemote("localhost", "VRidgeduinoControllers", VRidge.Remotes.Capabilities.Controllers))
+                while (true)
                 {
-                    while (true)
+                    using (Remote = 
+                        new VRidge.Remotes.VridgeRemote("localhost", 
+                        "VRidgeduinoControllers", 
+                        VRidge.Remotes.Capabilities.Controllers | 
+                        VRidge.Remotes.Capabilities.HeadTracking))
                     {
+                        VRidgeStateDisplay();
+                        Thread.Sleep(500);
                     }
                 }
             }
