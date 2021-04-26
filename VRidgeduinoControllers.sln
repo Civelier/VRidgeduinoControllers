@@ -1,0 +1,115 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30804.86
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VRidgeduinoControllers", "VRidgeduinoControllers\VRidgeduinoControllers.csproj", "{CEE54703-4F0F-4BD4-82B8-E36C7CCF2B0A}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestArduinoUDP", "TestArduinoUDP\TestArduinoUDP.vcxproj", "{C5F80730-F44F-4478-BDAE-6634EFC2CA88}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WiFiNINA-1.8.1", "..\..\..\Documents\Arduino\libraries\WiFiNINA\WiFiNINA-1.8.1.vcxitems", "{1A324E43-5FC9-4F7A-805E-EF7698076515}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZeroMQ", "..\MKRTest\ZeroMQ\ZeroMQ.vcxitems", "{4EC0996D-BEC6-487D-BAA3-FE72C2B4E39D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestUDPCommunication", "TestUDPCommunication\TestUDPCommunication.csproj", "{F3F50A6C-4EF5-4C6C-BD55-4497BC8BB8A1}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Arduino_Low_Power-1.2.2", "..\..\..\Documents\Arduino\libraries\Arduino_Low_Power\Arduino_Low_Power-1.2.2.vcxitems", "{C959568F-091D-4AE5-91C1-4CC2F91F4582}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RTCZero-1.6.0", "..\..\..\Documents\Arduino\libraries\RTCZero\RTCZero-1.6.0.vcxitems", "{324CD5D2-B4A2-43F0-AEF1-5CD71B8A3D48}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VRidgeduino", "VRidgeduino\VRidgeduino.vcxproj", "{BDE274A4-A0AA-417C-8267-59B5773A35BC}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Adafruit_MPU6050-2.0.4", "..\..\..\Documents\Arduino\libraries\Adafruit_MPU6050\Adafruit_MPU6050-2.0.4.vcxitems", "{B56DAF51-5E00-441B-B2A2-9E92DBFF5630}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Wire-1.0", "..\..\..\AppData\Local\arduino15\packages\arduino\hardware\samd\1.8.11\libraries\Wire\Wire-1.0.vcxitems", "{698D59CE-2D69-4EFF-9CAA-5FBEEDAB9870}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Base64_Codec-1.0.5", "..\..\..\Documents\Arduino\libraries\Base64_Codec\Base64_Codec-1.0.5.vcxitems", "{3D878524-6F5A-4CE3-A56D-75B8BE52F4B6}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Adafruit_Circuit_Playground-1.11.2", "..\..\..\Documents\Arduino\libraries\Adafruit_Circuit_Playground\Adafruit_Circuit_Playground-1.11.2.vcxitems", "{4C59FCA3-5E38-44AE-8AC3-7ECD0DBEEDC7}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Adafruit_Unified_Sensor-1.1.4", "..\..\..\Documents\Arduino\libraries\Adafruit_Unified_Sensor\Adafruit_Unified_Sensor-1.1.4.vcxitems", "{078E4F3C-017C-48D2-8CCD-B5F314E47C8B}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Adafruit_BusIO-1.7.3", "..\..\..\Documents\Arduino\libraries\Adafruit_BusIO\Adafruit_BusIO-1.7.3.vcxitems", "{CF21AE37-D173-4414-854C-4AA7AF6286FE}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SPI-1.0", "..\..\..\AppData\Local\arduino15\packages\arduino\hardware\samd\1.8.11\libraries\SPI\SPI-1.0.vcxitems", "{315064A0-EE06-4A66-938F-389B601402ED}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VRE.Vridge.API.Client", "..\vridge-api\src\csharp\VRE.Vridge.API.Client\VRE.Vridge.API.Client.csproj", "{A1398A88-3AE5-4C2D-BC31-BFC67815FD9A}"
+EndProject
+Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		..\..\..\Documents\Arduino\libraries\Adafruit_Unified_Sensor\Adafruit_Unified_Sensor-1.1.4.vcxitems*{078e4f3c-017c-48d2-8ccd-b5f314e47c8b}*SharedItemsImports = 9
+		..\..\..\Documents\Arduino\libraries\WiFiNINA\WiFiNINA-1.8.1.vcxitems*{1a324e43-5fc9-4f7a-805e-ef7698076515}*SharedItemsImports = 9
+		..\..\..\AppData\Local\arduino15\packages\arduino\hardware\samd\1.8.11\libraries\SPI\SPI-1.0.vcxitems*{315064a0-ee06-4a66-938f-389b601402ed}*SharedItemsImports = 9
+		..\..\..\Documents\Arduino\libraries\RTCZero\RTCZero-1.6.0.vcxitems*{324cd5d2-b4a2-43f0-aef1-5cd71b8a3d48}*SharedItemsImports = 9
+		..\..\..\Documents\Arduino\libraries\Base64_Codec\Base64_Codec-1.0.5.vcxitems*{3d878524-6f5a-4ce3-a56d-75b8be52f4b6}*SharedItemsImports = 9
+		..\..\..\Documents\Arduino\libraries\Adafruit_Circuit_Playground\Adafruit_Circuit_Playground-1.11.2.vcxitems*{4c59fca3-5e38-44ae-8ac3-7ecd0dbeedc7}*SharedItemsImports = 9
+		..\MKRTest\ZeroMQ\ZeroMQ.vcxitems*{4ec0996d-bec6-487d-baa3-fe72c2b4e39d}*SharedItemsImports = 9
+		..\..\..\AppData\Local\arduino15\packages\arduino\hardware\samd\1.8.11\libraries\Wire\Wire-1.0.vcxitems*{698d59ce-2d69-4eff-9caa-5fbeedab9870}*SharedItemsImports = 9
+		..\..\..\Documents\Arduino\libraries\Adafruit_MPU6050\Adafruit_MPU6050-2.0.4.vcxitems*{b56daf51-5e00-441b-b2a2-9e92dbff5630}*SharedItemsImports = 9
+		..\..\..\AppData\Local\arduino15\packages\arduino\hardware\samd\1.8.11\libraries\SPI\SPI-1.0.vcxitems*{bde274a4-a0aa-417c-8267-59b5773a35bc}*SharedItemsImports = 4
+		..\..\..\AppData\Local\arduino15\packages\arduino\hardware\samd\1.8.11\libraries\Wire\Wire-1.0.vcxitems*{bde274a4-a0aa-417c-8267-59b5773a35bc}*SharedItemsImports = 4
+		..\..\..\Documents\Arduino\libraries\Adafruit_BusIO\Adafruit_BusIO-1.7.3.vcxitems*{bde274a4-a0aa-417c-8267-59b5773a35bc}*SharedItemsImports = 4
+		..\..\..\Documents\Arduino\libraries\Adafruit_MPU6050\Adafruit_MPU6050-2.0.4.vcxitems*{bde274a4-a0aa-417c-8267-59b5773a35bc}*SharedItemsImports = 4
+		..\..\..\Documents\Arduino\libraries\Adafruit_Unified_Sensor\Adafruit_Unified_Sensor-1.1.4.vcxitems*{bde274a4-a0aa-417c-8267-59b5773a35bc}*SharedItemsImports = 4
+		..\..\..\Documents\Arduino\libraries\Arduino_Low_Power\Arduino_Low_Power-1.2.2.vcxitems*{bde274a4-a0aa-417c-8267-59b5773a35bc}*SharedItemsImports = 4
+		..\..\..\Documents\Arduino\libraries\Base64_Codec\Base64_Codec-1.0.5.vcxitems*{bde274a4-a0aa-417c-8267-59b5773a35bc}*SharedItemsImports = 4
+		..\..\..\Documents\Arduino\libraries\RTCZero\RTCZero-1.6.0.vcxitems*{bde274a4-a0aa-417c-8267-59b5773a35bc}*SharedItemsImports = 4
+		..\..\..\Documents\Arduino\libraries\WiFiNINA\WiFiNINA-1.8.1.vcxitems*{bde274a4-a0aa-417c-8267-59b5773a35bc}*SharedItemsImports = 4
+		..\..\..\Documents\Arduino\libraries\Arduino_Low_Power\Arduino_Low_Power-1.2.2.vcxitems*{c5f80730-f44f-4478-bdae-6634efc2ca88}*SharedItemsImports = 4
+		..\..\..\Documents\Arduino\libraries\RTCZero\RTCZero-1.6.0.vcxitems*{c5f80730-f44f-4478-bdae-6634efc2ca88}*SharedItemsImports = 4
+		..\..\..\Documents\Arduino\libraries\WiFiNINA\WiFiNINA-1.8.1.vcxitems*{c5f80730-f44f-4478-bdae-6634efc2ca88}*SharedItemsImports = 4
+		..\MKRTest\ZeroMQ\ZeroMQ.vcxitems*{c5f80730-f44f-4478-bdae-6634efc2ca88}*SharedItemsImports = 4
+		..\..\..\Documents\Arduino\libraries\Arduino_Low_Power\Arduino_Low_Power-1.2.2.vcxitems*{c959568f-091d-4ae5-91c1-4cc2f91f4582}*SharedItemsImports = 9
+		..\..\..\Documents\Arduino\libraries\Adafruit_BusIO\Adafruit_BusIO-1.7.3.vcxitems*{cf21ae37-d173-4414-854c-4aa7af6286fe}*SharedItemsImports = 9
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CEE54703-4F0F-4BD4-82B8-E36C7CCF2B0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEE54703-4F0F-4BD4-82B8-E36C7CCF2B0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEE54703-4F0F-4BD4-82B8-E36C7CCF2B0A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CEE54703-4F0F-4BD4-82B8-E36C7CCF2B0A}.Debug|x86.Build.0 = Debug|Any CPU
+		{CEE54703-4F0F-4BD4-82B8-E36C7CCF2B0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEE54703-4F0F-4BD4-82B8-E36C7CCF2B0A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CEE54703-4F0F-4BD4-82B8-E36C7CCF2B0A}.Release|x86.ActiveCfg = Release|Any CPU
+		{CEE54703-4F0F-4BD4-82B8-E36C7CCF2B0A}.Release|x86.Build.0 = Release|Any CPU
+		{C5F80730-F44F-4478-BDAE-6634EFC2CA88}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{C5F80730-F44F-4478-BDAE-6634EFC2CA88}.Debug|x86.ActiveCfg = Debug|Win32
+		{C5F80730-F44F-4478-BDAE-6634EFC2CA88}.Debug|x86.Build.0 = Debug|Win32
+		{C5F80730-F44F-4478-BDAE-6634EFC2CA88}.Release|Any CPU.ActiveCfg = Release|Win32
+		{C5F80730-F44F-4478-BDAE-6634EFC2CA88}.Release|x86.ActiveCfg = Release|Win32
+		{C5F80730-F44F-4478-BDAE-6634EFC2CA88}.Release|x86.Build.0 = Release|Win32
+		{F3F50A6C-4EF5-4C6C-BD55-4497BC8BB8A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3F50A6C-4EF5-4C6C-BD55-4497BC8BB8A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3F50A6C-4EF5-4C6C-BD55-4497BC8BB8A1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F3F50A6C-4EF5-4C6C-BD55-4497BC8BB8A1}.Debug|x86.Build.0 = Debug|Any CPU
+		{F3F50A6C-4EF5-4C6C-BD55-4497BC8BB8A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3F50A6C-4EF5-4C6C-BD55-4497BC8BB8A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3F50A6C-4EF5-4C6C-BD55-4497BC8BB8A1}.Release|x86.ActiveCfg = Release|Any CPU
+		{F3F50A6C-4EF5-4C6C-BD55-4497BC8BB8A1}.Release|x86.Build.0 = Release|Any CPU
+		{BDE274A4-A0AA-417C-8267-59B5773A35BC}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{BDE274A4-A0AA-417C-8267-59B5773A35BC}.Debug|x86.ActiveCfg = Debug|Win32
+		{BDE274A4-A0AA-417C-8267-59B5773A35BC}.Debug|x86.Build.0 = Debug|Win32
+		{BDE274A4-A0AA-417C-8267-59B5773A35BC}.Release|Any CPU.ActiveCfg = Release|Win32
+		{BDE274A4-A0AA-417C-8267-59B5773A35BC}.Release|x86.ActiveCfg = Release|Win32
+		{BDE274A4-A0AA-417C-8267-59B5773A35BC}.Release|x86.Build.0 = Release|Win32
+		{A1398A88-3AE5-4C2D-BC31-BFC67815FD9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1398A88-3AE5-4C2D-BC31-BFC67815FD9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1398A88-3AE5-4C2D-BC31-BFC67815FD9A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A1398A88-3AE5-4C2D-BC31-BFC67815FD9A}.Debug|x86.Build.0 = Debug|Any CPU
+		{A1398A88-3AE5-4C2D-BC31-BFC67815FD9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1398A88-3AE5-4C2D-BC31-BFC67815FD9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1398A88-3AE5-4C2D-BC31-BFC67815FD9A}.Release|x86.ActiveCfg = Release|Any CPU
+		{A1398A88-3AE5-4C2D-BC31-BFC67815FD9A}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {17013227-57FF-48D3-9BFD-95A82410AF70}
+	EndGlobalSection
+EndGlobal
