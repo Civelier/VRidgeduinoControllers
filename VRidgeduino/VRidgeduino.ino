@@ -206,7 +206,7 @@ void ConnectWifi()
 
 Adafruit_MPU6050 mpu;
 Button btn1(0);
-Packet packet(RemoteType::LeftRemote, btn1, mpu);
+Packet packet(RemoteType::RightRemote, btn1, mpu);
 // the setup function runs once when you press reset or power the board
 void setup()
 {

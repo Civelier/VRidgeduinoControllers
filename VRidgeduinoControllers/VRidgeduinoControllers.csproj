@@ -86,6 +86,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Remotes\ControllerBehaviour.cs" />
+    <Compile Include="Remotes\ControllerUpdateInfo.cs" />
+    <Compile Include="Remotes\PositionFrame.cs" />
+    <Compile Include="Remotes\SafeControllerRemote.cs" />
+    <Compile Include="Remotes\SafeHeadRemote.cs" />
+    <Compile Include="Services\KinectService.cs" />
+    <Compile Include="Services\VRidgeduinoCommunicationService.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
