@@ -94,9 +94,10 @@ namespace VRidgeduinoControllers.Services
                 frame.CopySkeletonDataTo(skeletons);
                 var s = FindValidSkeleton(skeletons);
                 if (s == null) return;
-                var LeftHandRot = s.BoneOrientations[K.JointType.HandLeft].AbsoluteRotation.Quaternion.ToAccord();
+                var rot = Matrix4x4.CreateFromYawPitchRoll(0, (float)VRE.Vridge.API.Client.Helpers.MathHelpers.DegToRad(-180), 0);
+                var LeftHandRot = rot * s.BoneOrientations[K.JointType.HandLeft].AbsoluteRotation.Quaternion.ToAccord();
                 var LeftHandPos = s.Joints[K.JointType.HandLeft].Position.ToAccord();
-                var RightHandRot = s.BoneOrientations[K.JointType.HandRight].AbsoluteRotation.Quaternion.ToAccord();
+                var RightHandRot = rot * s.BoneOrientations[K.JointType.HandRight].AbsoluteRotation.Quaternion.ToAccord();
                 var RightHandPos = s.Joints[K.JointType.HandRight].Position.ToAccord();
                 var HeadPos = s.Joints[K.JointType.ShoulderCenter].Position.ToAccord();
                 var transform = Matrix4x4.CreateTranslation(new Vector3(0, 2, 0)) *

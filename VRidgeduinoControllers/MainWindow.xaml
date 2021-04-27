@@ -7,20 +7,16 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" Closed="Window_Closed">
     <Grid>
-        <Label Content="Button:" HorizontalAlignment="Left" Margin="96,138,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="ButtonLabel" Content="false" HorizontalAlignment="Left" Margin="139,138,0,0" VerticalAlignment="Top" Width="77"/>
-        <Rectangle x:Name="BtnRectangle" Fill="#FF36D11E" HorizontalAlignment="Left" Height="100" Margin="280,189,0,0" Stroke="Black" VerticalAlignment="Top" Width="100"/>
-        <Label Content="X:" HorizontalAlignment="Left" Margin="96,189,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="GyroX" Content="0" HorizontalAlignment="Left" Margin="134,189,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.018,-0.09"/>
-        <Label Content="Y:" HorizontalAlignment="Left" Margin="96,215,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="GyroY" Content="0" HorizontalAlignment="Left" Margin="134,215,0,0" VerticalAlignment="Top"/>
-        <Label Content="Z:" HorizontalAlignment="Left" Margin="96,241,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="GyroZ" Content="0" HorizontalAlignment="Left" Margin="134,241,0,0" VerticalAlignment="Top"/>
-        <Label Content="Left:" HorizontalAlignment="Left" Margin="78,87,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="LeftConnectionLabel" Content="Disconnected" HorizontalAlignment="Left" Margin="110,87,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="LeftHandRotLabel" Content="Label" HorizontalAlignment="Left" Margin="296,28,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="LeftHandPosLabel" Content="Label" HorizontalAlignment="Left" Margin="296,59,0,0" VerticalAlignment="Top"/>
         <Label x:Name="VRidgeStateLabel" Content="VRidge off" HorizontalAlignment="Left" Margin="57,28,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="RightTrigLabel" Content="Label" HorizontalAlignment="Left" Margin="546,80,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="RightGripLabel" Content="Label" HorizontalAlignment="Left" Margin="546,106,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="RightAnalogLabel" Content="Label" HorizontalAlignment="Left" Margin="546,132,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="RightStickLabel" Content="Label" HorizontalAlignment="Left" Margin="546,158,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="LeftTrigLabel" Content="Label" HorizontalAlignment="Left" Margin="236,88,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="LeftGripLabel" Content="Label" HorizontalAlignment="Left" Margin="236,114,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="LeftAnalogLabel" Content="Label" HorizontalAlignment="Left" Margin="236,140,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="LeftStickLabel" Content="Label" HorizontalAlignment="Left" Margin="236,166,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="RightQuaternionLabel" Content="Label" HorizontalAlignment="Left" Margin="546,184,0,0" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>

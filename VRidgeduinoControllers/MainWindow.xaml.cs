@@ -91,6 +91,13 @@ namespace VRidgeduinoControllers
         private void CommunicationService_LeftControllerUpdateAvailable(object sender, ControllerUpdateInfo e)
         {
             LeftRemote.Info = e;
+            Dispatcher.Invoke(() =>
+            {
+                LeftTrigLabel.Content = $"Trig: {e.Trig}";
+            LeftGripLabel.Content = $"Grip: {e.Grip}";
+            LeftAnalogLabel.Content = $"X: {e.AnalogX} Y: {e.AnalogY}";
+            LeftStickLabel.Content = $"Stick: {e.TouchPress}";
+            });
         }
 
 
@@ -161,7 +168,14 @@ namespace VRidgeduinoControllers
         private void CommunicationService_RightControllerUpdateAvailable(object sender, ControllerUpdateInfo e)
         {
             RightRemote.Info = e;
-            Dispatcher.Invoke(() => ButtonLabel.Content = e.Trig? "true" : "false");
+            Dispatcher.Invoke(() =>
+            {
+                RightTrigLabel.Content = $"Trig: {e.Trig}";
+                RightGripLabel.Content = $"Grip: {e.Grip}";
+                RightAnalogLabel.Content = $"X: {e.AnalogX} Y: {e.AnalogY}";
+                RightStickLabel.Content = $"Stick: {e.TouchPress}";
+                RightQuaternionLabel.Content = $"Quaternion: {e.Rotation}";
+            });
         }
 
 

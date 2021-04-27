@@ -132,7 +132,7 @@
   </ImportGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties arduino.upload.port="COM20" config.Debug.customdebug_mkrwifi1010_debugger_type="universal" />
+      <UserProperties arduino.upload.port="COM20" config.Debug.customdebug_mkrwifi1010_debugger_type="universal" config.Debug.customdebug_yun_debugger_type="universal" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

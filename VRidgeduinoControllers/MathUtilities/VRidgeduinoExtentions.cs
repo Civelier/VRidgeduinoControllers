@@ -14,7 +14,7 @@ namespace VRidgeduinoControllers.MathUtilities
     {
         public static Vector4 ToAccord(this K.Vector4 quaternion)
         {
-            return new Vector4(quaternion.X, quaternion.Y, quaternion.Z, quaternion.W);
+            return new Vector4(quaternion.X, quaternion.Z, quaternion.Y, quaternion.W);
         }
 
         public static Vector3 ToAccord(this N.Vector3 vector)

@@ -18,7 +18,7 @@
 
 
 
-#define DEBUG
+//#define DEBUG
 
 #ifdef DEBUG
 #define Debug(text) Serial.print(text)
