@@ -190,11 +190,11 @@ void setup()
 	mpu.setXGyroOffset(220);
 	mpu.setYGyroOffset(76);
 	mpu.setZGyroOffset(-85);
-	mpu.setZAccelOffset(1788); // 1688 factory default for my test chip
+	mpu.setZAccelOffset(-1788); // 1688 factory default for my test chip
 
-	RGB.SetColor(Colors::Turquoise);
 	// Calibration Time: generate offsets and calibrate our MPU6050
 
+	RGB.SetColor(Colors::Turquoise);
 	mpu.CalibrateAccel(30);
 	RGB.SetColor(Colors::Purple);
 	mpu.CalibrateGyro(30);
@@ -327,6 +327,7 @@ void loop()
 		udp.print(' ');
 		udp.print(q.w);
 		udp.endPacket();
+		delay(10);
 	}
 	blinkState = !blinkState;
 	digitalWrite(LED_BUILTIN, blinkState);

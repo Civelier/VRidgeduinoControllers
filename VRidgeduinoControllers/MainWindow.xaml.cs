@@ -94,9 +94,10 @@ namespace VRidgeduinoControllers
             Dispatcher.Invoke(() =>
             {
                 LeftTrigLabel.Content = $"Trig: {e.Trig}";
-            LeftGripLabel.Content = $"Grip: {e.Grip}";
-            LeftAnalogLabel.Content = $"X: {e.AnalogX} Y: {e.AnalogY}";
-            LeftStickLabel.Content = $"Stick: {e.TouchPress}";
+                LeftGripLabel.Content = $"Grip: {e.Grip}";
+                LeftAnalogLabel.Content = $"X: {e.AnalogX} Y: {e.AnalogY}";
+                LeftStickLabel.Content = $"Stick: {e.TouchPress}";
+                LeftQuaternionLabel.Content = $"Quaternion: {e.Rotation}";
             });
         }
 
@@ -146,6 +147,7 @@ namespace VRidgeduinoControllers
                         LeftRemote.TryUpdateController();
                         RightRemote.TryUpdateController();
                         Head.TryUpdateHead();
+                        DebugFeatures();
                         Thread.Sleep(5);
                     }
                 }
@@ -159,10 +161,47 @@ namespace VRidgeduinoControllers
         private void Kinect_PositionFrameReady(object sender, PositionFrame e)
         {
             LeftRemote.Position = e.LeftPos;
-            LeftRemote.Rotation = e.LeftRot;
             RightRemote.Position = e.RightPos;
-            RightRemote.Rotation = e.RightRot;
             Head.Position = e.HeadPos;
+        }
+
+        private enum DebugState
+        {
+            None,
+            DebugSelectPressed,
+            DebugSelectReleased,
+        }
+        DebugState _state;
+        private void DebugFeatures()
+        {
+            if (_state == DebugState.None && RightRemote.Info.Grip && RightRemote.Info.Trig)
+            {
+                _state = DebugState.DebugSelectPressed;
+            }
+            else if (_state == DebugState.DebugSelectPressed && !RightRemote.Info.Trig && !RightRemote.Info.Grip)
+            {
+                _state = DebugState.DebugSelectReleased;
+            }
+            else if (_state == DebugState.DebugSelectReleased)
+            {
+                if (LeftRemote.Info.Grip)
+                {
+                    _state = DebugState.None;
+                    LeftRemote.ResetRotation();
+                }
+
+                else if (RightRemote.Info.Grip)
+                {
+                    _state = DebugState.None;
+                    RightRemote.ResetRotation();
+                }
+
+                else if (RightRemote.Info.Trig)
+                {
+                    _state = DebugState.None;
+                    Head.TryResetPosition();
+                }
+            }
         }
 
         private void CommunicationService_RightControllerUpdateAvailable(object sender, ControllerUpdateInfo e)

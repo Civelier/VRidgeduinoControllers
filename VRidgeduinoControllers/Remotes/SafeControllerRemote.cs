@@ -15,6 +15,7 @@ namespace VRidgeduinoControllers.Remotes
     {
         private static int _id = 0;
         private readonly VridgeRemote _remote;
+        private Matrix4x4 _rotationOffset = Matrix4x4.Identity;
         public Vector3 Position { get; set; }
         public Vector4 Rotation { get; set; }
         public ControllerUpdateInfo Info { get; set; }
@@ -54,7 +55,9 @@ namespace VRidgeduinoControllers.Remotes
                         (int)Info.Hand - 1,
                         HeadRelation.Unrelated,
                         Info.Hand,
-                        Rotation.ToNumericsQuaternion(),
+                        (_rotationOffset * Matrix4x4.CreateRotationY(VRidgeduinoMath.ToRadians(90))
+                        * Info.Rotation.SwapComponents((y, x, z, w) => new Vector4(x, z, y, w)))
+                        .ToNumericsQuaternion(),
                         Position.ToNumerics(),
                         Info.AnalogX,
                         Info.AnalogY,
@@ -70,6 +73,12 @@ namespace VRidgeduinoControllers.Remotes
             }
             catch (ObjectDisposedException) { }
             return false;
+        }
+
+        public void ResetRotation()
+        {
+            _rotationOffset = Matrix4x4.CreateRotationZ(
+                -Info.Rotation.Z);
         }
     }
 }

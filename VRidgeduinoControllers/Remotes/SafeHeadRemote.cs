@@ -12,6 +12,7 @@ namespace VRidgeduinoControllers.Remotes
     public class SafeHeadRemote
     {
         private readonly VridgeRemote _remote;
+        private bool _resetQueued = false;
 
         public Vector3 Position { get; set; }
 
@@ -41,6 +42,11 @@ namespace VRidgeduinoControllers.Remotes
             {
                 if (TryGetHead(out HeadRemote head))
                 {
+                    if (_resetQueued)
+                    {
+                        head.Recenter();
+                        _resetQueued = false;
+                    }
                     head.SetPosition(Position.X, Position.Y, Position.Z);
                     return true;
                 }
@@ -50,6 +56,23 @@ namespace VRidgeduinoControllers.Remotes
 
             }
             return false;
+        }
+
+        public void TryResetPosition()
+        {
+            try
+            {
+                if (TryGetHead(out HeadRemote head))
+                {
+                    head.Recenter();
+                    return;
+                }
+            }
+            catch (ObjectDisposedException)
+            {
+
+            }
+            _resetQueued = true;
         }
     }
 }
