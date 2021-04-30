@@ -41,6 +41,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ArduinoMKRDebug", "ArduinoM
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MPU6050Example", "MPU6050Example\MPU6050Example.vcxproj", "{CB3C7FBE-3F5A-48B3-91EE-7906BD5775D5}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestButtons", "TestButtons\TestButtons.vcxproj", "{349B7C75-7A56-4F97-8CDE-AD3221810B16}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\..\..\Documents\Arduino\libraries\Adafruit_Unified_Sensor\Adafruit_Unified_Sensor-1.1.4.vcxitems*{078e4f3c-017c-48d2-8ccd-b5f314e47c8b}*SharedItemsImports = 9
@@ -113,6 +115,12 @@ Global
 		{CB3C7FBE-3F5A-48B3-91EE-7906BD5775D5}.Release|Any CPU.ActiveCfg = Release|Win32
 		{CB3C7FBE-3F5A-48B3-91EE-7906BD5775D5}.Release|x86.ActiveCfg = Release|Win32
 		{CB3C7FBE-3F5A-48B3-91EE-7906BD5775D5}.Release|x86.Build.0 = Release|Win32
+		{349B7C75-7A56-4F97-8CDE-AD3221810B16}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{349B7C75-7A56-4F97-8CDE-AD3221810B16}.Debug|x86.ActiveCfg = Debug|Win32
+		{349B7C75-7A56-4F97-8CDE-AD3221810B16}.Debug|x86.Build.0 = Debug|Win32
+		{349B7C75-7A56-4F97-8CDE-AD3221810B16}.Release|Any CPU.ActiveCfg = Release|Win32
+		{349B7C75-7A56-4F97-8CDE-AD3221810B16}.Release|x86.ActiveCfg = Release|Win32
+		{349B7C75-7A56-4F97-8CDE-AD3221810B16}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

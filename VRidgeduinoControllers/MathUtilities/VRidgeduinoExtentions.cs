@@ -39,6 +39,11 @@ namespace VRidgeduinoControllers.MathUtilities
             };
         }
 
+        public static Vector4 ToAccord(this N.Quaternion quaternion)
+        {
+            return new Vector4(quaternion.X, quaternion.Y, quaternion.Z, quaternion.W);
+        }
+
         public static Matrix4x4 ToAccord(this N.Matrix4x4 matrix)
         {
             var rows = matrix.ToRows();

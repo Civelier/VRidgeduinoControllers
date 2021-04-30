@@ -91,5 +91,49 @@ public:
 
 extern RGBClass RGB;
 
+struct RGBFlash
+{
+	Color color;
+	uint32_t flashTime;
+	uint32_t downTime;
+	uint32_t next;
+	bool flashing;
+	bool on = false;
+
+	RGBFlash(uint32_t flash, uint32_t down, Color col) : flashTime(flash), downTime(down), color(col)
+	{
+
+	}
+
+	void Start()
+	{
+		if (on) return;
+		on = true;
+		next = millis();
+	}
+
+	void Stop()
+	{
+		on = false;
+		RGB.SetColor(Colors::Black);
+	}
+
+	void Update()
+	{
+		if (!on || millis() < next) return;
+		
+		if (!flashing)
+		{
+			RGB.SetColor(color);
+			next += flashTime;
+		}
+		else
+		{
+			RGB.SetColor(Colors::Black);
+			next += downTime;
+		}
+	}
+};
+
 #endif
 

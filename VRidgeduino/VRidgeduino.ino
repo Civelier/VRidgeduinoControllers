@@ -155,7 +155,35 @@ Button btn1(0);
 Button btn2(1);
 Button stick(2);
 JoyStick joystick(A1, A2);
-Packet packet(RemoteType::RightRemote, btn1, btn2, joystick, stick);
+Packet packet(RemoteType::LeftRemote, btn1, btn2, joystick, stick);
+//Packet packet(RemoteType::RightRemote, btn1, btn2, joystick, stick);
+
+RGBFlash batteryLow(500, 9500, Colors::Orange);
+RGBFlash batteryCritical(100, 100, Colors::Red);
+RGBFlash dmpFlash(500, 9500, Colors::Blue);
+
+void CheckBattery()
+{
+	if (packet.Bat.LowBattery())
+	{
+		batteryLow.Start();
+		batteryLow.Update();
+	}
+	else batteryLow.Stop();
+
+
+	/*if (packet.Bat.CriticalBattery())
+	{
+		batteryCritical.Start();
+		while (packet.Bat.CriticalBattery())
+		{
+			batteryCritical.Update();
+		}
+		batteryCritical.Stop();
+	}*/
+}
+
+
 // the setup function runs once when you press reset or power the board
 void setup()
 {
@@ -165,11 +193,12 @@ void setup()
 #endif //  DEBUG
 	Wire.begin();
 	Wire.setClock(400000);
-	/*Wire.begin();
-	Wire.setClock(400000);
 	packet.Init();
 	RGB.Init();
-	if (!mpu.begin())
+	pinMode(LED_BUILTIN, OUTPUT);
+	/*Wire.begin();
+	Wire.setClock(400000);*/
+	/*if (!mpu.begin())
 	{
 		Throw(VRidgeduinoError::MPUInitFail);
 	}*/
@@ -180,7 +209,10 @@ void setup()
 	DebugValue(connection);
 	if (!connection)
 	{
-		Throw(VRidgeduinoError::MPUInitFail);
+		//Throw(VRidgeduinoError::MPUInitFail);
+		RGB.SetColor(Colors::Black);
+		dmpFlash.Start();
+		return;
 	}
 	RGB.SetColor(Colors::LightBlue);
 	if (mpu.dmpInitialize())
@@ -228,7 +260,6 @@ void setup()
 	RGB.SetColor(Colors::Green);
 	delay(100);
 	RGB.SetColor(Colors::Black);
-	pinMode(LED_BUILTIN, OUTPUT);
 }
 
 
@@ -236,6 +267,15 @@ void setup()
 // the loop function runs over and over again until power down or reset
 void loop()
 {
+	CheckBattery();
+	if (!dmpReady)
+	{
+		blinkState = !blinkState;
+		digitalWrite(LED_BUILTIN, blinkState);
+		dmpFlash.Update();
+		delay(10);
+		return;
+	}
 	/*digitalWrite(GREEN_LED_pin, HIGH);
 	sensors_event_t a, g, temp;
 	mpu.getEvent(&a, &g, &temp);

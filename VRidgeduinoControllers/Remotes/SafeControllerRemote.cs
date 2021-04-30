@@ -15,9 +15,12 @@ namespace VRidgeduinoControllers.Remotes
     {
         private static int _id = 0;
         private readonly VridgeRemote _remote;
-        private Matrix4x4 _rotationOffset = Matrix4x4.Identity;
+        public float RotationOffset = 0;
         public Vector3 Position { get; set; }
-        public Vector4 Rotation { get; set; }
+        public Vector3 Offset { get; set; }
+        public Vector4 Rotation => Info.Rotation;
+        public Vector4 ConvertedRotation { get; set; }
+        public Vector3 EulerRotation { get; set; }
         public ControllerUpdateInfo Info { get; set; }
         public readonly int ID;
 
@@ -51,13 +54,21 @@ namespace VRidgeduinoControllers.Remotes
             {
                 if (TryGetController(out ControllerRemote controller))
                 {
+                    ConvertedRotation = Matrix4x4.CreateFromYawPitchRoll(VRidgeduinoMath.ToRadians(90), 0, 0)
+                        //* Matrix4x4.CreateFromYawPitchRoll(-RotationOffset, 0, 0)
+                            * Info.Rotation.SwapComponents((y, x, z, w) => new Vector4(x, z, y, w));
+                    //ConvertedRotation = Matrix4x4.CreateFromYawPitchRoll(0, VRidgeduinoMath.ToRadians(90), 0) *
+                    //    Rotation.SwapComponents((x, y, z, w) => new Vector4(y, z, x, w));
+                    EulerRotation = ConvertedRotation.GetEulerAngles();
+
+                    //ConvertedRotation = System.Numerics.Matrix4x4.CreateFromYawPitchRoll(Offset.X, Offset.Y, Offset.Z).ToAccord() * 
+                    //    ConvertedRotation;
+
                     controller.SetControllerState(
                         (int)Info.Hand - 1,
                         HeadRelation.Unrelated,
                         Info.Hand,
-                        (_rotationOffset * Matrix4x4.CreateRotationY(VRidgeduinoMath.ToRadians(90))
-                        * Info.Rotation.SwapComponents((y, x, z, w) => new Vector4(x, z, y, w)))
-                        .ToNumericsQuaternion(),
+                        ConvertedRotation.ToNumericsQuaternion(),
                         Position.ToNumerics(),
                         Info.AnalogX,
                         Info.AnalogY,
@@ -77,8 +88,7 @@ namespace VRidgeduinoControllers.Remotes
 
         public void ResetRotation()
         {
-            _rotationOffset = Matrix4x4.CreateRotationZ(
-                -Info.Rotation.Z);
+            RotationOffset += EulerRotation.X;
         }
     }
 }

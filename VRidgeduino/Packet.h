@@ -88,6 +88,32 @@ struct JoyStick
 	}
 };
 
+
+
+struct Battery
+{
+	uint32_t nextRead = 0;
+	float lastVoltage;
+	float GetVoltage()
+	{
+		if (nextRead > millis()) return lastVoltage;
+		int sensorValue = analogRead(ADC_BATTERY);
+		// Convert the analog reading (which goes from 0 - 1023) to a voltage (0 - 4.3V):
+		lastVoltage = sensorValue * (4.3 / 1023.0);
+		return nextRead += 10000;
+	}
+
+	bool LowBattery()
+	{
+		return GetVoltage() < 3.0f;
+	}
+
+	bool CriticalBattery()
+	{
+		return GetVoltage() < 2.85f;
+	}
+};
+
 class Packet
 {
 private:
@@ -97,7 +123,7 @@ public:
 	Button Btn2;
 	JoyStick Joystick;
 	Button Stick;
-	
+	Battery Bat;
 public:
 	Packet(RemoteType type, Button btn1, Button btn2, JoyStick joystick, Button stick);
 	void Init();

@@ -18,6 +18,15 @@
         <Label x:Name="LeftStickLabel" Content="Label" HorizontalAlignment="Left" Margin="236,166,0,0" VerticalAlignment="Top"/>
         <Label x:Name="RightQuaternionLabel" Content="Label" HorizontalAlignment="Left" Margin="546,184,0,0" VerticalAlignment="Top"/>
         <Label x:Name="LeftQuaternionLabel" Content="Label" HorizontalAlignment="Left" Margin="236,184,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="LeftBatteryVoltageLabel" Content="Label" HorizontalAlignment="Left" Margin="236,70,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="RightBatteryVoltageLabel" Content="Label" HorizontalAlignment="Left" Margin="546,62,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="LeftConvertedQuaternionLabel" Content="Label" HorizontalAlignment="Left" Margin="236,210,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="RightConvertedQuaternionLabel" Content="Label" HorizontalAlignment="Left" Margin="546,210,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="LeftEuler" Content="Label" HorizontalAlignment="Left" Margin="236,236,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="RightEuler" Content="Label" HorizontalAlignment="Left" Margin="546,236,0,0" VerticalAlignment="Top" RenderTransformOrigin="8.754,0.321"/>
+        <Slider x:Name="RightXSlider" HorizontalAlignment="Left" Margin="415,278,0,0" VerticalAlignment="Top" Width="295" ValueChanged="RightXSlider_ValueChanged" Maximum="180" Minimum="-180"/>
+        <Slider x:Name="RightYSlider" HorizontalAlignment="Left" Margin="415,301,0,0" VerticalAlignment="Top" Width="295" Maximum="180" Minimum="-180" ValueChanged="RightYSlider_ValueChanged"/>
+        <Slider x:Name="RightZSlider" HorizontalAlignment="Left" Margin="415,324,0,0" VerticalAlignment="Top" Width="295" Maximum="180" Minimum="-180" ValueChanged="RightZSlider_ValueChanged"/>
 
     </Grid>
 </Window>

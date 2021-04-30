@@ -32,6 +32,9 @@ size_t Packet::printTo(Print& print)
 	print.print(Joystick.GetYFloat());
 	print.print(' ');
 	print.print(Stick.GetState());
+	// read the input on analog pin 0:
+	print.print(' ');
+	print.print(Bat.GetVoltage());
 	/*print.print(' ');
 	print.print(a.gyro.x);
 	print.print(' ');

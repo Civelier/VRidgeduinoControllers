@@ -21,12 +21,13 @@ namespace VRidgeduinoControllers.Remotes
         public bool System { get; private set; }
         public bool TouchPress { get; private set; }
         public Vector4 Rotation { get; private set; }
+        public float Battery { get; private set; }
 
 
         public static ControllerUpdateInfo? FromPacketPosRot(byte[] packet)
         {
             var s = Encoding.ASCII.GetString(packet).Split(' ');
-            if (s.Length < 10) return null;
+            if (s.Length < 11) return null;
 
             float x = VRidgeduinoMath.Clamp(float.Parse(s[3]), -1, 1);
             float y = VRidgeduinoMath.Clamp(float.Parse(s[4]), -1, 1);
@@ -44,8 +45,9 @@ namespace VRidgeduinoControllers.Remotes
                 AnalogY = x,
                 Grip = s[2] == "1",
                 TouchPress = s[5] == "0",
-                Rotation = new Vector4(float.Parse(s[6]), float.Parse(s[7]),
-                float.Parse(s[8]), float.Parse(s[9])),
+                Battery = float.Parse(s[6]),
+                Rotation = new Vector4(float.Parse(s[7]), float.Parse(s[8]),
+                float.Parse(s[9]), float.Parse(s[10])),
             };
         }
     }

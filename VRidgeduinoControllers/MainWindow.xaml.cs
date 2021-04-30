@@ -98,6 +98,7 @@ namespace VRidgeduinoControllers
                 LeftAnalogLabel.Content = $"X: {e.AnalogX} Y: {e.AnalogY}";
                 LeftStickLabel.Content = $"Stick: {e.TouchPress}";
                 LeftQuaternionLabel.Content = $"Quaternion: {e.Rotation}";
+                LeftBatteryVoltageLabel.Content = $"Battery: {e.Battery}";
             });
         }
 
@@ -135,7 +136,9 @@ namespace VRidgeduinoControllers
                         CommunicationService_RightControllerUpdateAvailable;
                     Kinect.PositionFrameReady += Kinect_PositionFrameReady;
 
-
+                    Head.Position = new Vector3(0f, 2.5f, 1.3f);
+                    LeftRemote.Position = new Vector3(-0.2f, 2.2f, 1f);
+                    RightRemote.Position = new Vector3(0.2f, 2.2f, 1f);
                     int i = 0;
                     while (true)
                     {
@@ -144,8 +147,22 @@ namespace VRidgeduinoControllers
                             VRidgeStateDisplay();
                             i = 0;
                         }
-                        LeftRemote.TryUpdateController();
-                        RightRemote.TryUpdateController();
+                        if (LeftRemote.TryUpdateController())
+                        {
+                            Dispatcher.Invoke(() =>
+                            {
+                                LeftConvertedQuaternionLabel.Content = LeftRemote.ConvertedRotation;
+                                LeftEuler.Content = LeftRemote.EulerRotation;
+                            });
+                        }
+                        if (RightRemote.TryUpdateController())
+                        {
+                            Dispatcher.Invoke(() =>
+                            {
+                                RightConvertedQuaternionLabel.Content = RightRemote.ConvertedRotation;
+                                RightEuler.Content = RightRemote.EulerRotation;
+                            });
+                        }
                         Head.TryUpdateHead();
                         DebugFeatures();
                         Thread.Sleep(5);
@@ -214,6 +231,7 @@ namespace VRidgeduinoControllers
                 RightAnalogLabel.Content = $"X: {e.AnalogX} Y: {e.AnalogY}";
                 RightStickLabel.Content = $"Stick: {e.TouchPress}";
                 RightQuaternionLabel.Content = $"Quaternion: {e.Rotation}";
+                RightBatteryVoltageLabel.Content = $"Battery: {e.Battery}";
             });
         }
 
@@ -223,6 +241,37 @@ namespace VRidgeduinoControllers
             CommunicationService.Stop();
             Kinect.Dispose();
             RemoteHandler.Abort();
+        }
+
+        //private Vector4 CreateRotation(double x, double y, double z)
+        //{
+        //    var euler = VRidgeduinoMath.ToRadiansEuler(new Vector3((float)x, (float)y, (float)z));
+
+        //    return System.Numerics.Quaternion.CreateFromYawPitchRoll(euler.X, euler.Y, euler.Z).ToAccord();
+        //}
+
+        private Vector3 CreateOffset(double x, double y, double z)
+        {
+            return VRidgeduinoMath.ToRadiansEuler(new Vector3((float)x, (float)y, (float)z));
+        }
+
+        private void RightXSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            //RightRemote.ConvertedRotation = CreateRotation(RightXSlider.Value, RightYSlider.Value, RightZSlider.Value);
+            RightRemote.Offset = CreateOffset(RightXSlider.Value, RightYSlider.Value, RightZSlider.Value);
+        }
+
+        private void RightYSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            //RightRemote.ConvertedRotation = CreateRotation(RightXSlider.Value, RightYSlider.Value, RightZSlider.Value);
+            RightRemote.Offset = CreateOffset(RightXSlider.Value, RightYSlider.Value, RightZSlider.Value);
+
+        }
+
+        private void RightZSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            //RightRemote.ConvertedRotation = CreateRotation(RightXSlider.Value, RightYSlider.Value, RightZSlider.Value);
+            RightRemote.Offset = CreateOffset(RightXSlider.Value, RightYSlider.Value, RightZSlider.Value);
         }
     }
 }
