@@ -23,20 +23,45 @@ enum RemoteType : uint8_t
 struct Button
 {
 	uint8_t pin;
+	bool invert;
+	bool consolidate;
+	bool lastVal;
+	uint8_t solid;
+	uint8_t consolidateCount;
 
-	Button(uint8_t p)
+	Button(uint8_t p, bool inv)
 	{
 		pin = p;
+		invert = inv;
+	}
+
+	Button(uint8_t p, bool inv, uint8_t consCount)
+	{
+		pin = p;
+		invert = inv;
+		consolidate = true;
+		consolidateCount = consCount;
+		solid = 0;
 	}
 
 	void Init()
 	{
-		pinMode(pin, INPUT);
+		pinMode(pin, INPUT_PULLUP);
 	}
 
-	uint8_t GetState() const
+	uint8_t GetState()
 	{
-		return digitalRead(pin);
+		if (!consolidate) return digitalRead(pin) != invert;
+
+		if (digitalRead(pin) != invert) solid++;
+		else solid = 0;
+
+		if (solid < consolidateCount)
+		{
+			solid = consolidateCount;
+			return true;
+		}
+		return false;
 	}
 };
 
@@ -48,11 +73,15 @@ struct JoyStick
 	int16_t ymin = 100;
 	int16_t xmax = 100;
 	int16_t ymax = 100;
+	bool xinvert;
+	bool yinvert;
 
-	JoyStick(uint8_t x, uint8_t y)
+	JoyStick(uint8_t x, uint8_t y, bool invertX, bool invertY)
 	{
 		xpin = x;
 		ypin = y;
+		xinvert = invertX;
+		yinvert = invertY;
 	}
 
 	int16_t GetX()
@@ -70,7 +99,7 @@ struct JoyStick
 		xmax = max(xmax, GetX());
 		xmin = min(xmin, GetX());
 		int16_t delta = xmax - xmin;
-		return (GetX() / (float)delta) * 2.0f - 1.0f;
+		return ((GetX() / (float)delta) * 2.0f - 1.0f) * (xinvert ? -1 : 1);
 	}
 
 	float GetYFloat()
@@ -78,7 +107,7 @@ struct JoyStick
 		ymax = max(ymax, GetY());
 		ymin = min(ymin, GetY());
 		int16_t delta = ymax - ymin;
-		return (GetY() / (float)delta) * 2.0f - 1.0f;
+		return ((GetY() / (float)delta) * 2.0f - 1.0f) * (yinvert ? -1 : 1);
 	}
 
 	void Init()
@@ -94,6 +123,7 @@ struct Battery
 {
 	uint32_t nextRead = 0;
 	float lastVoltage;
+	float lastPercent;
 	float GetVoltage()
 	{
 		if (nextRead > millis()) return lastVoltage;
@@ -103,14 +133,24 @@ struct Battery
 		return nextRead += 10000;
 	}
 
+	float GetPercent()
+	{
+		float v = GetVoltage();
+		float delta = 4.4f - 3.2f;
+		float p = (v - 3.2f) / delta * 100;
+		if (p > 120) return lastPercent;
+		lastPercent = p;
+		return p;
+	}
+
 	bool LowBattery()
 	{
-		return GetVoltage() < 3.0f;
+		return GetPercent() < 20;
 	}
 
 	bool CriticalBattery()
 	{
-		return GetVoltage() < 2.85f;
+		return GetVoltage() < 10;
 	}
 };
 
@@ -119,13 +159,17 @@ class Packet
 private:
 public:
 	RemoteType Type;
-	Button Btn1;
-	Button Btn2;
-	JoyStick Joystick;
 	Button Stick;
+	Button Grip;
+	Button Trig;
+	Button Menu;
+	Button System;
+	Button Option1;
+	Button Option2;
+	JoyStick Joystick;
 	Battery Bat;
 public:
-	Packet(RemoteType type, Button btn1, Button btn2, JoyStick joystick, Button stick);
+	Packet(RemoteType type, Button stick, Button grip, Button trig, Button menu, Button sys, Button option1, Button option2, JoyStick joystick);
 	void Init();
 	size_t printTo(Print& print);
 };

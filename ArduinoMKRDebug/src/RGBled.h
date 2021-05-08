@@ -48,6 +48,7 @@ struct ErrorLight
 {
 	Color color;
 	uint32_t millis;
+	bool end;
 };
 
 typedef ErrorLight* Pattern;
@@ -75,6 +76,17 @@ public:
 		WiFiDrv::analogWrite(RED_LED_pin, color.R);
 		WiFiDrv::analogWrite(GREEN_LED_pin, color.G);
 		WiFiDrv::analogWrite(BLUE_LED_pin, color.B);
+	}
+
+	void PlayPattern(Pattern pattern)
+	{
+		ErrorLight l;
+		int i = 0;
+		do
+		{
+			l = pattern[i++];
+			SetLED(l);
+		} while (!l.end);
 	}
 
 	void SetError(Pattern error)

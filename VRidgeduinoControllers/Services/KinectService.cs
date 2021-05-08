@@ -53,7 +53,7 @@ namespace VRidgeduinoControllers.Services
                         sensor.SkeletonFrameReady += Sensor_SkeletonFrameReady;
                         while (sensor.Status == K.KinectStatus.Connected)
                         {
-
+                            Thread.Sleep(1000);
                         }
                         Console.WriteLine("Kinect disconnected");
                     }

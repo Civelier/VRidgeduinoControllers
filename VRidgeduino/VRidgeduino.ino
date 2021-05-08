@@ -9,6 +9,7 @@
 #include "RGBled.h"
 #include "I2Cdev.h"
 #include "MPU6050_6Axis_MotionApps20.h"
+#include "Wire.h"
 
 #define Throw(error) Debug("Error found in file \'"); Debug(__FILE__); Debug("\' in function \'"); Debug(__FUNCTION__); Debug("\' at line \'"); Debug(__LINE__); Debug("\': "); DebugError(error);\
 SetError(error);
@@ -151,16 +152,65 @@ bool blinkState;
 uint8_t teapotPacket[14] = { '$', 0x02, 0,0, 0,0, 0,0, 0,0, 0x00, 0x00, '\r', '\n' };
 
 MPU6050 mpu;
-Button btn1(0);
-Button btn2(1);
-Button stick(2);
-JoyStick joystick(A1, A2);
-Packet packet(RemoteType::LeftRemote, btn1, btn2, joystick, stick);
-//Packet packet(RemoteType::RightRemote, btn1, btn2, joystick, stick);
+Button stick(0, true);
+Button grip(1, true);
+Button trig(2, true);
+Button menu(3, true);
+Button sys(4, true);
+Button option1(5, true);
+Button option2(A6, true);
+//JoyStick joystick(A4, A5, false, false);
+//Packet packet(RemoteType::LeftRemote, stick, grip, trig, menu, sys, option1, option2, joystick);
+JoyStick joystick(A5, A4, false, false);
+Packet packet(RemoteType::RightRemote, stick, grip, trig, menu, sys, option1, option2, joystick);
 
 RGBFlash batteryLow(500, 9500, Colors::Orange);
 RGBFlash batteryCritical(100, 100, Colors::Red);
 RGBFlash dmpFlash(500, 9500, Colors::Blue);
+
+ErrorLight Bat20[] =
+{
+	{Colors::Red, 250},
+	{Colors::Black, 250 + 500 * 6, true}
+};
+
+ErrorLight Bat40[] =
+{
+	{Colors::Yellow, 250},
+	{Colors::Black, 250},
+	{Colors::Yellow, 250},
+	{Colors::Black, 250 + 500 * 5, true}
+};
+
+ErrorLight Bat60[] =
+{
+	{Colors::Orange, 250},
+	{Colors::Black, 250},
+	{Colors::Orange, 250},
+	{Colors::Black, 250},
+	{Colors::Orange, 250},
+	{Colors::Black, 250 + 500 * 4, true}
+};
+
+ErrorLight Bat80[] =
+{
+	{Colors::Green, 250},
+	{Colors::Black, 250},
+	{Colors::Green, 250},
+	{Colors::Black, 250},
+	{Colors::Green, 250},
+	{Colors::Black, 250},
+	{Colors::Green, 250},
+	{Colors::Black, 250 + 500 * 3, true}
+};
+
+ErrorLight Bat100[] =
+{
+	{Colors::Green, 1000},
+	{Colors::Black, 1000, true}
+};
+
+bool charging;
 
 void CheckBattery()
 {
@@ -183,37 +233,25 @@ void CheckBattery()
 	}*/
 }
 
+#ifndef PMIC_ADDRESS
+#define PMIC_ADDRESS 0x6B
+#endif
 
-// the setup function runs once when you press reset or power the board
-void setup()
+#define PMIC_REG08 0x08
+
+byte getPowerState() 
+{ 
+	Wire.beginTransmission(PMIC_ADDRESS); 
+	Wire.write(PMIC_REG08); 
+	Wire.requestFrom(PMIC_ADDRESS, 1); 
+	byte val = Wire.read(); 
+	Wire.endTransmission();
+	return val;
+}
+
+void resetMPU()
 {
-#ifdef  DEBUG
-	Serial.begin(115200);
-	delay(1000);
-#endif //  DEBUG
-	Wire.begin();
-	Wire.setClock(400000);
-	packet.Init();
-	RGB.Init();
-	pinMode(LED_BUILTIN, OUTPUT);
-	/*Wire.begin();
-	Wire.setClock(400000);*/
-	/*if (!mpu.begin())
-	{
-		Throw(VRidgeduinoError::MPUInitFail);
-	}*/
-	RGB.SetColor(Colors::Aqua);
-	mpu.initialize();
-	//pinMode(INTERRUPT_PIN, INPUT);
-	bool connection = mpu.testConnection();
-	DebugValue(connection);
-	if (!connection)
-	{
-		//Throw(VRidgeduinoError::MPUInitFail);
-		RGB.SetColor(Colors::Black);
-		dmpFlash.Start();
-		return;
-	}
+	
 	RGB.SetColor(Colors::LightBlue);
 	if (mpu.dmpInitialize())
 	{
@@ -225,7 +263,6 @@ void setup()
 	mpu.setZAccelOffset(-1788); // 1688 factory default for my test chip
 
 	// Calibration Time: generate offsets and calibrate our MPU6050
-
 	RGB.SetColor(Colors::Turquoise);
 	mpu.CalibrateAccel(30);
 	RGB.SetColor(Colors::Purple);
@@ -250,6 +287,46 @@ void setup()
 
 	// get expected DMP packet size for later comparison
 	packetSize = mpu.dmpGetFIFOPacketSize();
+}
+
+// the setup function runs once when you press reset or power the board
+void setup()
+{
+#ifdef  DEBUG
+	Serial.begin(115200);
+	delay(1000);
+#endif //  DEBUG
+	Wire.begin();
+	Wire.setClock(400000);
+	packet.Init();
+	RGB.Init();
+	pinMode(LED_BUILTIN, OUTPUT);
+
+	if (getPowerState())
+	{
+		charging = true;
+		return;
+	}
+	/*Wire.begin();
+	Wire.setClock(400000);*/
+	/*if (!mpu.begin())
+	{
+		Throw(VRidgeduinoError::MPUInitFail);
+	}*/
+	RGB.SetColor(Colors::Aqua);
+	mpu.initialize();
+	//pinMode(INTERRUPT_PIN, INPUT);
+	bool connection = mpu.testConnection();
+	DebugValue(connection);
+	if (!connection)
+	{
+		Throw(VRidgeduinoError::MPUInitFail);
+		/*RGB.SetColor(Colors::Black);
+		dmpFlash.Start();
+		return;*/
+	}
+	
+	resetMPU();
 
 	RGB.SetColor(Colors::Yellow);
 	ConnectWifi();
@@ -267,6 +344,19 @@ void setup()
 // the loop function runs over and over again until power down or reset
 void loop()
 {
+	if (charging)
+	{
+		blinkState = !blinkState;
+		digitalWrite(LED_BUILTIN, blinkState);
+		float bat = packet.Bat.GetPercent();
+		DebugValue(bat);
+		if (bat < 30) RGB.PlayPattern(Bat20);
+		else if (bat < 50) RGB.PlayPattern(Bat40);
+		else if (bat < 70) RGB.PlayPattern(Bat60);
+		else if (bat < 90) RGB.PlayPattern(Bat80);
+		else RGB.PlayPattern(Bat100);
+		return;
+	}
 	CheckBattery();
 	if (!dmpReady)
 	{
@@ -275,6 +365,16 @@ void loop()
 		dmpFlash.Update();
 		delay(10);
 		return;
+	}
+
+	if (packet.Option1.GetState())
+	{
+		RGB.SetColor(Colors::Magenta);
+		while (packet.Option1.GetState());
+		RGB.SetColor(Colors::LightGreen);
+		delay(2000);
+		resetMPU();
+		RGB.SetColor(Colors::Black);
 	}
 	/*digitalWrite(GREEN_LED_pin, HIGH);
 	sensors_event_t a, g, temp;

@@ -32,6 +32,56 @@ namespace VRidgeduinoControllers
     /// </summary>
     public partial class MainWindow : Window
     {
+
+        struct DebugState
+        {
+            private bool _rightRemoteBtn1;
+            private bool _rightRemoteBtn2;
+            private bool _leftRemoteBtn1;
+            private bool _leftRemoteBtn2;
+            private bool _bothBtn2Down;
+
+            public event EventHandler RightBtn1Pressed;
+            public event EventHandler RightBtn2Pressed;
+            public event EventHandler LeftBtn1Pressed;
+            public event EventHandler LeftBtn2Pressed;
+            public event EventHandler BothBtn2Pressed;
+
+            public void UpdateRemotes(SafeControllerRemote right, SafeControllerRemote left)
+            {
+                if (_bothBtn2Down && (right.Info.Option2 && left.Info.Option2)) return;
+                if (_bothBtn2Down)
+                {
+                    _bothBtn2Down = false;
+                    BothBtn2Pressed?.Invoke(this, new EventArgs());
+                    _rightRemoteBtn2 = false;
+                    _leftRemoteBtn2 = false;
+
+                }
+                
+                if (right.Info.Option2 && left.Info.Option2)
+                {
+                    _bothBtn2Down = true;
+                    _rightRemoteBtn2 = false;
+                    _leftRemoteBtn2 = false;
+                }
+
+                if (_rightRemoteBtn1 && !right.Info.Option1) RightBtn1Pressed?.Invoke(this, new EventArgs());
+                if (_rightRemoteBtn2 && !right.Info.Option2) RightBtn2Pressed?.Invoke(this, new EventArgs());
+                
+                if (_leftRemoteBtn1 && !left.Info.Option1) LeftBtn1Pressed?.Invoke(this, new EventArgs());
+                if (_leftRemoteBtn2 && !left.Info.Option2) LeftBtn2Pressed?.Invoke(this, new EventArgs());
+                
+
+                _rightRemoteBtn1 = right.Info.Option1;
+                _rightRemoteBtn2 = right.Info.Option2;
+                
+                _leftRemoteBtn1 = left.Info.Option1;
+                _leftRemoteBtn2 = left.Info.Option2;
+            }
+        }
+
+        DebugState _debug = new DebugState();
         VRidge.Remotes.VridgeRemote Remote;
         SafeControllerRemote LeftRemote;
         SafeControllerRemote RightRemote;
@@ -40,6 +90,8 @@ namespace VRidgeduinoControllers
         VRidgeduinoCommunicationService CommunicationService;
         KinectService Kinect;
         Thread RemoteHandler;
+        bool _trackLeft = true;
+        bool _trackRight = true;
 
         bool VRidgeHeadOK
         {
@@ -86,20 +138,29 @@ namespace VRidgeduinoControllers
             Kinect = new KinectService();
             RemoteHandler = new Thread(RemoteRoutine);
             RemoteHandler.Start();
+            _debug.LeftBtn2Pressed += _debug_LeftBtn2Pressed;
+            _debug.RightBtn2Pressed += _debug_RightBtn2Pressed;
+            _debug.BothBtn2Pressed += _debug_BothBtn2Pressed;
+        }
+
+        private void _debug_BothBtn2Pressed(object sender, EventArgs e)
+        {
+            Head.TryResetPosition();
+        }
+
+        private void _debug_RightBtn2Pressed(object sender, EventArgs e)
+        {
+            _trackRight = !_trackRight;
+        }
+
+        private void _debug_LeftBtn2Pressed(object sender, EventArgs e)
+        {
+            _trackLeft = !_trackLeft;
         }
 
         private void CommunicationService_LeftControllerUpdateAvailable(object sender, ControllerUpdateInfo e)
         {
             LeftRemote.Info = e;
-            Dispatcher.Invoke(() =>
-            {
-                LeftTrigLabel.Content = $"Trig: {e.Trig}";
-                LeftGripLabel.Content = $"Grip: {e.Grip}";
-                LeftAnalogLabel.Content = $"X: {e.AnalogX} Y: {e.AnalogY}";
-                LeftStickLabel.Content = $"Stick: {e.TouchPress}";
-                LeftQuaternionLabel.Content = $"Quaternion: {e.Rotation}";
-                LeftBatteryVoltageLabel.Content = $"Battery: {e.Battery}";
-            });
         }
 
 
@@ -111,6 +172,24 @@ namespace VRidgeduinoControllers
                     VRidgeHeadOK && VRidgeControllersOK ? "VRidge on" :
                     !VRidgeControllersOK ? "VRidge controllers off" :
                     "VRidge head off";
+
+                RightTrigLabel.Content = $"Trig: {RightRemote.Info.Trig}";
+                RightGripLabel.Content = $"Grip: {RightRemote.Info.Grip}";
+                RightAnalogLabel.Content = $"X: {RightRemote.Info.AnalogX} Y: {RightRemote.Info.AnalogY}";
+                RightStickLabel.Content = $"Stick: {RightRemote.Info.TouchPress}";
+                RightQuaternionLabel.Content = $"Quaternion: {RightRemote.Info.Rotation}";
+                RightBatteryVoltageLabel.Content = $"Battery: {RightRemote.Info.Battery}";
+                ROption1.Content = $"Option1: {RightRemote.Info.Option1}";
+                ROption2.Content = $"Option2: {RightRemote.Info.Option2}";
+
+                LeftTrigLabel.Content = $"Trig: {LeftRemote.Info.Trig}";
+                LeftGripLabel.Content = $"Grip: {LeftRemote.Info.Grip}";
+                LeftAnalogLabel.Content = $"X: {LeftRemote.Info.AnalogX} Y: {LeftRemote.Info.AnalogY}";
+                LeftStickLabel.Content = $"Stick: {LeftRemote.Info.TouchPress}";
+                LeftQuaternionLabel.Content = $"Quaternion: {LeftRemote.Info.Rotation}";
+                LeftBatteryVoltageLabel.Content = $"Battery: {LeftRemote.Info.Battery}";
+                LOption1.Content = $"Option1: {LeftRemote.Info.Option1}";
+                LOption2.Content = $"Option2: {LeftRemote.Info.Option2}";
             });
         }
 
@@ -142,30 +221,32 @@ namespace VRidgeduinoControllers
                     int i = 0;
                     while (true)
                     {
-                        if (i++ == 100)
+                        if (i++ == 10)
                         {
                             VRidgeStateDisplay();
-                            i = 0;
-                        }
-                        if (LeftRemote.TryUpdateController())
-                        {
                             Dispatcher.Invoke(() =>
                             {
                                 LeftConvertedQuaternionLabel.Content = LeftRemote.ConvertedRotation;
                                 LeftEuler.Content = LeftRemote.EulerRotation;
                             });
-                        }
-                        if (RightRemote.TryUpdateController())
-                        {
                             Dispatcher.Invoke(() =>
                             {
                                 RightConvertedQuaternionLabel.Content = RightRemote.ConvertedRotation;
                                 RightEuler.Content = RightRemote.EulerRotation;
                             });
+                            i = 0;
+                        }
+                        if (LeftRemote.TryUpdateController())
+                        {
+                            
+                        }
+                        if (RightRemote.TryUpdateController())
+                        {
+                            
                         }
                         Head.TryUpdateHead();
                         DebugFeatures();
-                        Thread.Sleep(5);
+                        Thread.Sleep(16);
                     }
                 }
             }
@@ -177,62 +258,20 @@ namespace VRidgeduinoControllers
 
         private void Kinect_PositionFrameReady(object sender, PositionFrame e)
         {
-            LeftRemote.Position = e.LeftPos;
-            RightRemote.Position = e.RightPos;
+            if (_trackLeft) LeftRemote.Position = e.LeftPos;
+            if (_trackRight) RightRemote.Position = e.RightPos;
             Head.Position = e.HeadPos;
         }
 
-        private enum DebugState
-        {
-            None,
-            DebugSelectPressed,
-            DebugSelectReleased,
-        }
-        DebugState _state;
+        
         private void DebugFeatures()
         {
-            if (_state == DebugState.None && RightRemote.Info.Grip && RightRemote.Info.Trig)
-            {
-                _state = DebugState.DebugSelectPressed;
-            }
-            else if (_state == DebugState.DebugSelectPressed && !RightRemote.Info.Trig && !RightRemote.Info.Grip)
-            {
-                _state = DebugState.DebugSelectReleased;
-            }
-            else if (_state == DebugState.DebugSelectReleased)
-            {
-                if (LeftRemote.Info.Grip)
-                {
-                    _state = DebugState.None;
-                    LeftRemote.ResetRotation();
-                }
-
-                else if (RightRemote.Info.Grip)
-                {
-                    _state = DebugState.None;
-                    RightRemote.ResetRotation();
-                }
-
-                else if (RightRemote.Info.Trig)
-                {
-                    _state = DebugState.None;
-                    Head.TryResetPosition();
-                }
-            }
+            _debug.UpdateRemotes(RightRemote, LeftRemote);
         }
 
         private void CommunicationService_RightControllerUpdateAvailable(object sender, ControllerUpdateInfo e)
         {
             RightRemote.Info = e;
-            Dispatcher.Invoke(() =>
-            {
-                RightTrigLabel.Content = $"Trig: {e.Trig}";
-                RightGripLabel.Content = $"Grip: {e.Grip}";
-                RightAnalogLabel.Content = $"X: {e.AnalogX} Y: {e.AnalogY}";
-                RightStickLabel.Content = $"Stick: {e.TouchPress}";
-                RightQuaternionLabel.Content = $"Quaternion: {e.Rotation}";
-                RightBatteryVoltageLabel.Content = $"Battery: {e.Battery}";
-            });
         }
 
 

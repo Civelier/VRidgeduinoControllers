@@ -24,9 +24,13 @@
         <Label x:Name="RightConvertedQuaternionLabel" Content="Label" HorizontalAlignment="Left" Margin="546,210,0,0" VerticalAlignment="Top"/>
         <Label x:Name="LeftEuler" Content="Label" HorizontalAlignment="Left" Margin="236,236,0,0" VerticalAlignment="Top"/>
         <Label x:Name="RightEuler" Content="Label" HorizontalAlignment="Left" Margin="546,236,0,0" VerticalAlignment="Top" RenderTransformOrigin="8.754,0.321"/>
-        <Slider x:Name="RightXSlider" HorizontalAlignment="Left" Margin="415,278,0,0" VerticalAlignment="Top" Width="295" ValueChanged="RightXSlider_ValueChanged" Maximum="180" Minimum="-180"/>
-        <Slider x:Name="RightYSlider" HorizontalAlignment="Left" Margin="415,301,0,0" VerticalAlignment="Top" Width="295" Maximum="180" Minimum="-180" ValueChanged="RightYSlider_ValueChanged"/>
-        <Slider x:Name="RightZSlider" HorizontalAlignment="Left" Margin="415,324,0,0" VerticalAlignment="Top" Width="295" Maximum="180" Minimum="-180" ValueChanged="RightZSlider_ValueChanged"/>
+        <Slider x:Name="RightXSlider" HorizontalAlignment="Left" Margin="412,338,0,0" VerticalAlignment="Top" Width="295" ValueChanged="RightXSlider_ValueChanged" Maximum="180" Minimum="-180"/>
+        <Slider x:Name="RightYSlider" HorizontalAlignment="Left" Margin="412,361,0,0" VerticalAlignment="Top" Width="295" Maximum="180" Minimum="-180" ValueChanged="RightYSlider_ValueChanged"/>
+        <Slider x:Name="RightZSlider" HorizontalAlignment="Left" Margin="412,384,0,0" VerticalAlignment="Top" Width="295" Maximum="180" Minimum="-180" ValueChanged="RightZSlider_ValueChanged"/>
+        <Label x:Name="LOption1" Content="Label" HorizontalAlignment="Left" Margin="236,262,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="LOption2" Content="Label" HorizontalAlignment="Left" Margin="236,293,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="ROption1" Content="Label" HorizontalAlignment="Left" Margin="546,262,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="ROption2" Content="Label" HorizontalAlignment="Left" Margin="546,293,0,0" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>

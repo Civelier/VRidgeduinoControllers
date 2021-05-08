@@ -40,7 +40,7 @@ namespace VRidgeduinoControllers.Services
         {
             using (UdpClient listener = new UdpClient(_port))
             {
-                    IPEndPoint groupEP = new IPEndPoint(IPAddress.Any, _port);
+                IPEndPoint groupEP = new IPEndPoint(IPAddress.Any, _port);
                 DateTime lastLeftConnection = DateTime.MinValue;
                 DateTime lastRightConnection = DateTime.MinValue;
                 try
@@ -48,7 +48,7 @@ namespace VRidgeduinoControllers.Services
                     while (true)
                     {
                         ControllerUpdateInfo? info = ControllerUpdateInfo
-                            .FromPacketPosRot(listener.Receive(ref groupEP));
+                            .FromPacket(listener.Receive(ref groupEP));
                         if (info.HasValue)
                         {
                             if (info.Value.Hand == VRE.Vridge.API.Client.Messages.BasicTypes.HandType.Left)
@@ -60,6 +60,7 @@ namespace VRidgeduinoControllers.Services
                                 RightControllerUpdateAvailable?.Invoke(this, info.Value);
                             }
                         }
+                        Thread.Sleep(5);
                     }
                 }
                 catch (SocketException e)

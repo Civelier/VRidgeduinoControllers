@@ -22,32 +22,38 @@ namespace VRidgeduinoControllers.Remotes
         public bool TouchPress { get; private set; }
         public Vector4 Rotation { get; private set; }
         public float Battery { get; private set; }
+        public bool Option1 { get; private set; }
+        public bool Option2 { get; private set; }
 
 
-        public static ControllerUpdateInfo? FromPacketPosRot(byte[] packet)
+        public static ControllerUpdateInfo? FromPacket(byte[] packet)
         {
             var s = Encoding.ASCII.GetString(packet).Split(' ');
-            if (s.Length < 11) return null;
+            if (s.Length < 15) return null;
 
-            float x = VRidgeduinoMath.Clamp(float.Parse(s[3]), -1, 1);
-            float y = VRidgeduinoMath.Clamp(float.Parse(s[4]), -1, 1);
+            float x = VRidgeduinoMath.Clamp(float.Parse(s[8]), -1, 1);
+            float y = VRidgeduinoMath.Clamp(float.Parse(s[9]), -1, 1);
 
-            if (x < 0.06 && x > -0.06) x = 0;
-            if (y < 0.06 && y > -0.06) y = 0;
+            if (x < 0.1 && x > -0.1) x = 0;
+            if (y < 0.1 && y > -0.1) y = 0;
 
 
             return new ControllerUpdateInfo()
             {
                 Hand = s[0] == "1" ? HandType.Left : HandType.Right,
-                Trig = s[1] == "1",
-                AnalogTrigger = s[1] == "1" ? 1 : 0,
+                TouchPress = s[1] == "1",
+                Grip = s[2] == "1",
+                Trig = s[3] == "1",
+                AnalogTrigger = s[3] == "1" ? 1 : 0,
+                Menu = s[4] == "1",
+                System = s[5] == "1",
+                Option1 = s[6] == "1",
+                Option2 = s[7] == "1",
                 AnalogX = y,
                 AnalogY = x,
-                Grip = s[2] == "1",
-                TouchPress = s[5] == "0",
-                Battery = float.Parse(s[6]),
-                Rotation = new Vector4(float.Parse(s[7]), float.Parse(s[8]),
-                float.Parse(s[9]), float.Parse(s[10])),
+                Battery = float.Parse(s[10]),
+                Rotation = new Vector4(float.Parse(s[11]), float.Parse(s[12]),
+                float.Parse(s[13]), float.Parse(s[14])),
             };
         }
     }
